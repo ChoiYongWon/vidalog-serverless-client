@@ -5,7 +5,6 @@ import {HostUrl} from "../.config/constant";
 
 export const Init = {
     start: () => {
-        console.log("HOST_URL", HostUrl)
         return new Promise(async (resolve, reject)=>{
             try{
                 //ACCESS TOKEN 을 통한 접근

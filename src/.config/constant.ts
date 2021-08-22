@@ -1,6 +1,6 @@
-export const HostUrl = process.env.HOST_URL
+export const HostUrl = process.env.REACT_APP_HOST_URL
 
 export const clientInfo = {
-    id : process.env.REFRESH_CLIENT_ID,
-    secret : process.env.REFRESH_CLIENT_SECRET 
+    id : process.env.REACT_APP_REFRESH_CLIENT_ID,
+    secret : process.env.REACT_APP_REFRESH_CLIENT_SECRET
 }
