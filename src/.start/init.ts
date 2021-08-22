@@ -1,7 +1,5 @@
 import {AuthAPI} from "../api/AuthAPI"
 import jwt from "jsonwebtoken"
-import {HostUrl} from "../.config/constant";
-
 
 export const Init = {
     start: () => {
