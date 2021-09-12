@@ -58,6 +58,7 @@ const Day = styled.div`
   user-select: none;
   @media(max-width: 600px){
     min-width: 2.25rem;
+    font-size: 0.875rem;
   }
 `
 
@@ -85,11 +86,12 @@ const DayItem = styled.div`
   flex-direction: column;
   padding: 0.75rem;
   box-sizing: border-box;
-
+  font-size: 1rem;
   @media(max-width: 600px){
     min-width: 2.25rem;
     min-height: 2.25rem;
     padding:  0.25rem 0.5rem;
+    font-size: 0.813rem;
   }
 `
 
@@ -104,7 +106,10 @@ const DayImageNumWrapper = styled.span`
   justify-content: center;
   align-items: center;
   border-radius: 100%;
+  @media(max-width: 600px){
 
+    font-size: 0.813rem;
+  }
 `
 
 const DayNum = styled.span`
