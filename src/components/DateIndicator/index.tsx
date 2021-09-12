@@ -57,11 +57,14 @@ const DateIndicator = (props: Props) => {
     const dayOffset = 30;
 
     const getDateInfo = useCallback(()=>{
-        let date = dayjs().subtract(363+dayjs().day(), "days")
+        let date = dayjs().subtract(364 + dayjs().day(), "days")
         const monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         let dateList = []
         let monthList = []
+        let flag = false
         // date.setDate(date.getDate()-(363+date.getDay()+1))
+
+
         for(let i=0;i<53;i++){
             for(let j=0;j<7;j++){
                 const y = date.year();
@@ -69,16 +72,21 @@ const DateIndicator = (props: Props) => {
                 const d = date.date();
                 const day = date.day()
 
-                if(day===0) {
+                if(day===0) { //일요일일때
                     if(d<=7){
                         monthList.push(monthName[m-1])
                     }
                     else monthList.push("")
                 }
                 dateList.push(y+"-"+m+"-"+d)
-                if(date.format() === dayjs().format()) break
+                if(date.format() === dayjs().format()){
+                    flag = true
+                    break
+                }
                 date = date.add(1, "day")
             }
+            if(flag) break
+
         }
 
         return {
@@ -96,8 +104,6 @@ const DateIndicator = (props: Props) => {
         setMonthPosition(dateInfo.monthList)
         // eslint-disable-next-line
     }, [])
-
-
 
     return (
             <Wrapper>
