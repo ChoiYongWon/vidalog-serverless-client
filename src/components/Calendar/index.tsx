@@ -58,7 +58,7 @@ const Day = styled.div`
   user-select: none;
   @media(max-width: 600px){
     min-width: 2.25rem;
-    font-size: 0.875rem;
+    font-size: 0.938rem;
   }
 `
 
