@@ -43,7 +43,7 @@ const DayBar = styled.div`
   width: 100%;
   height: auto;
   padding: 1rem 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #24292e;
   display: flex;
 `
@@ -55,7 +55,6 @@ const Day = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
   user-select: none;
   @media(max-width: 600px){
     min-width: 2.25rem;
@@ -112,7 +111,6 @@ const DayNum = styled.span`
   backdrop-filter: blur(0.4px);
   border-radius: 4px;
   padding: 0 2px;
-  font-weight: bold;
 `
 
 const DayImageWrapper = styled.div`
@@ -141,7 +139,6 @@ const NonFilledItem = styled.div`
   justify-content: center;
   align-items: center;
   color: #24292e;
-  font-weight: bold;
   width: 3rem;
   height: 3rem;
   border-radius: 100%;
@@ -163,7 +160,6 @@ const DisabledNonFilledItem = styled.div`
   justify-content: center;
   align-items: center;
   color: rgb(52,58,64,0.3);
-  font-weight: bold;
   width: 3rem;
   height: 3rem;
   border-radius: 100%;
