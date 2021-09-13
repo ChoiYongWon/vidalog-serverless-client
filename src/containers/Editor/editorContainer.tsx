@@ -135,7 +135,11 @@ const EditorContainer = () => {
         data.append("content", TextInputRef.current.value)
         data.append("date", `${editDate.year}-${editDate.month}-${editDate.date}`)
         data.append("location", LocationInputRef.current.value)
-        PostAPI.uploadPost(data).then(()=>history.push("/")).catch(()=>console.log("전송 실패"))
+        PostAPI.uploadPost(data).then(()=>history.push("/")).catch(async (res)=>{
+            const data = await res.json()
+            console.log(data)
+            console.log("전송 실패")
+        })
     }, [imageFiles, history, editDate])
 
     return <Editor
