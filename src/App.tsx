@@ -45,8 +45,10 @@ function App() {
             // console.log("payload", payload)
             setUser(payload as User)
 
-        }).then(()=>setInitialized(true)).catch(()=>{
-            addNotification({text: "토큰이 만료되었습니다", duration: 3, status: "WARNING"})
+        }).then(()=>setInitialized(true)).catch((e)=>{
+            console.log("error", e)
+            if(e==="VRT_EXPIRED") addNotification({text: "토큰이 만료되었습니다", duration: 3, status: "WARNING"})
+
             setInitialized(true)
             history.push("auth")
         })

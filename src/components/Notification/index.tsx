@@ -46,7 +46,7 @@ const Wrapper = styled.div`
         case "ERROR":
             return "#F44336"
         case "WARNING":
-            return "#FFC107"
+            return "#ffc53d"
       }
   }};
   ${props=>{

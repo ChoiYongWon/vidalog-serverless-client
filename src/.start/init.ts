@@ -14,7 +14,7 @@ export const Init = {
             }catch(e){
                 //Refresh 요청
                 const VRT = localStorage.getItem("VRT")
-                if(!VRT) return reject(false)
+                if(!VRT) return reject("VRT_NOT_EXIST")
                 await AuthAPI.refreshToken(VRT).then(async (res)=>{
                     const result = await res.json()
                     localStorage.setItem("VAT",result.access_token)
@@ -23,7 +23,7 @@ export const Init = {
                     return resolve(rest)
                     }).catch(()=>{
                         //Refresh 만료
-                        return reject(false)
+                        return reject("VRT_EXPIRED")
                     })
             }
         })
