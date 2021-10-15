@@ -2,8 +2,8 @@ import React, {ChangeEvent, useCallback, useEffect, useMemo, useRef, useState} f
 import Editor from "../../components/Editor";
 import {PostAPI} from "../../api/PostAPI"
 import {useHistory} from "react-router-dom";
-import {useRecoilValue, useResetRecoilState} from "recoil";
-import {recoil_Home} from "../../recoils";
+import {useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
+import {recoil_Home, recoil_Notification} from "../../recoils";
 import dayjs from 'dayjs'
 type ImageFilesType = {
     key: string, //파일명
@@ -18,11 +18,13 @@ const EditorContainer = () => {
     const [textBoxStatus, setTextBoxStatus] = useState("stable")
     const [locationBoxStatus, setLocationBoxStatus] = useState("stable")
     const [checkedImage, setCheckedImage] = useState<string[]>([])
+    const [isSending, setIsSending] = useState<boolean>(false)
     const FileInputRef = useRef<any>(null)
     const TextInputRef = useRef<any>(null)
     const LocationInputRef = useRef<any>(null)
     const editDate = useRecoilValue(recoil_Home.editDate)
     const resetEditDate = useResetRecoilState(recoil_Home.editDate)
+    const addNotification = useSetRecoilState(recoil_Notification.notification_status)
     const history = useHistory()
 
 
@@ -120,10 +122,12 @@ const EditorContainer = () => {
     const onSuccessClick = useCallback(async (e:any)=>{
         e.preventDefault()
         if(!TextInputRef.current.value || !imageFiles.length){
+            addNotification({text: "일기를 작성해주세요", duration: 3, status: "ERROR"})
             setTextBoxStatus("error")
             return
         }
         if(!LocationInputRef.current.value){
+            addNotification({text: "장소를 설정해주세요", duration: 3, status: "ERROR"})
             setLocationBoxStatus("error")
             return
         }
@@ -135,11 +139,19 @@ const EditorContainer = () => {
         data.append("content", TextInputRef.current.value)
         data.append("date", `${editDate.year}-${editDate.month}-${editDate.date}`)
         data.append("location", LocationInputRef.current.value)
-        PostAPI.uploadPost(data).then(()=>history.push("/")).catch(async (res)=>{
+        setIsSending(true)
+        PostAPI.uploadPost(data).then(()=>{
+            addNotification({text: "업로드 완료", duration: 3, status: "SUCCESS"})
+            history.push("/")
+        }).catch(async (res)=>{
             const data = await res.json()
             console.log(data)
             console.log("전송 실패")
+            setIsSending(false)
+            addNotification({text: "업로드 실패", duration: 3, status: "ERROR"})
+
         })
+        // eslint-disable-next-line
     }, [imageFiles, history, editDate])
 
     return <Editor
@@ -156,6 +168,7 @@ const EditorContainer = () => {
         locationInputRef={LocationInputRef}
         textBoxStatus={textBoxStatus}
         locationBoxStatus={locationBoxStatus}
+        isSending={isSending}
     />
 }
 

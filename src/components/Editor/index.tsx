@@ -55,6 +55,7 @@ type Props = {
     locationInputRef: any
     textBoxStatus: string
     locationBoxStatus: string
+    isSending: boolean
 } & typeof defaultProps
 
 const defaultProps = {
@@ -70,7 +71,8 @@ const defaultProps = {
     textInputRef: null,
     locationInputRef: null,
     textBoxStatus: "stable",
-    locationBoxStatus: "stable"
+    locationBoxStatus: "stable",
+    isSending: false
 }
 
 const Editor = (props: Props) => {
@@ -83,7 +85,7 @@ const Editor = (props: Props) => {
             <Location status={props.locationBoxStatus} locationInputRef={props.locationInputRef}/>
             <ButtonWrapper>
                 <Button type={"button"} types={"prev"} value={"취소"} onClick={props.onCancelClick}></Button>
-                <Button type={"submit"} types={"next"} value={"완료"} status={true} onClick={props.onSuccessClick}></Button>
+                <Button type={"submit"} types={"next"} value={"완료"} status={!props.isSending} onClick={props.onSuccessClick}></Button>
             </ButtonWrapper>
         </Wrapper>
 

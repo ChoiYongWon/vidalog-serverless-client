@@ -29,6 +29,10 @@ import {
     editDate
 } from "./home";
 
+import {
+    notification_status
+} from "./notification";
+
 export const recoil_Home = {
     editDate
 }
@@ -58,4 +62,8 @@ export const recoil_Auth = {
     pw_rePw,
     pw_availablePw,
     pw_btnStatus
+}
+
+export const recoil_Notification = {
+    notification_status
 }

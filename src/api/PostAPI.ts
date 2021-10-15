@@ -21,6 +21,7 @@ export const PostAPI = {
                 "Authorization" : "Bearer "+localStorage.getItem("VAT")
             }
         }).then( (res)=>{
+
             if(!res.ok) throw res
             return res
         })

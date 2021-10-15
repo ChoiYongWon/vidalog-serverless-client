@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { RouterIndex } from "./routes/index"
 import {createGlobalStyle} from "styled-components"
 import { Init } from "./.start/init"
-import {recoil_Auth, recoil_User} from "./recoils/index";
+import {recoil_Auth, recoil_Notification, recoil_User} from "./recoils/index";
 import {useSetRecoilState} from "recoil";
 import { Auth } from "./types/Auth";
 import {useHistory} from "react-router-dom"
 import {User} from "./types/User";
+import NotificationPool from "./containers/Notification/NotificationPool";
 
 const GlobalStyle = createGlobalStyle`
   html, body {
@@ -33,6 +34,7 @@ function App() {
 
     const setAuthentication = useSetRecoilState(recoil_Auth.authenticate)
     const setUser = useSetRecoilState(recoil_User.user)
+    const addNotification = useSetRecoilState(recoil_Notification.notification_status)
     const [initialized, setInitialized] = useState(false)
     const history = useHistory()
 
@@ -44,6 +46,7 @@ function App() {
             setUser(payload as User)
 
         }).then(()=>setInitialized(true)).catch(()=>{
+            addNotification({text: "토큰이 만료되었습니다", duration: 3, status: "WARNING"})
             setInitialized(true)
             history.push("auth")
         })
@@ -56,6 +59,8 @@ function App() {
           <>
               <GlobalStyle/>
               <RouterIndex/>
+              <NotificationPool/>
+
           </> : null
 
 

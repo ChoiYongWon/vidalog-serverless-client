@@ -5,9 +5,10 @@ import LoginForm from "../../../components/Auth/LoginForm";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {Auth, Enum_AuthStatus} from "../../../types/Auth";
 import {useHistory} from "react-router-dom"
-import {recoil_Auth, recoil_User} from "../../../recoils";
+import {recoil_Auth, recoil_Notification, recoil_User} from "../../../recoils";
 import {LoginProcess} from "../../../services/LoginProcess";
 import {User} from "../../../types/User";
+
 
 
 const LoginFormContainer = () => {
@@ -16,6 +17,7 @@ const LoginFormContainer = () => {
     const [loginBtnStatus, setLoginBtnStatus] = useRecoilState(login_btnStatus)
     const setAuthStatus = useSetRecoilState(auth_status)
     const setAuthentication = useSetRecoilState(recoil_Auth.authenticate)
+    const addNotification = useSetRecoilState(recoil_Notification.notification_status)
     const setUser = useSetRecoilState(recoil_User.user)
     const history = useHistory()
     const [errorObj, setErrorObj] = useState({
@@ -47,6 +49,7 @@ const LoginFormContainer = () => {
         }).catch((e)=>{
             console.log(e)
             setId(""); setPw(""); setLoginBtnStatus(false);
+            addNotification({text: "로그인 실패", duration: 3, status: "ERROR"})
             setErrorObj({
                 error : true,
                 msg : "아이디 또는 비밀번호가 틀립니다."
