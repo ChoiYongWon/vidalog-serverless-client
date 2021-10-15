@@ -145,7 +145,7 @@ const EditorContainer = () => {
             history.push("/")
         }).catch(async (res:Response)=>{
             setIsSending(false)
-            console.log(res)
+            console.log("res2", res)
             if(res.status===413) addNotification({text: "업로드 실패, 용량이 너무 큽니다", duration: 3, status: "ERROR"})
             else addNotification({text: "업로드 실패", duration: 3, status: "ERROR"})
 
