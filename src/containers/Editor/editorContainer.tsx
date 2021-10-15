@@ -143,12 +143,11 @@ const EditorContainer = () => {
         PostAPI.uploadPost(data).then(()=>{
             addNotification({text: "업로드 완료", duration: 3, status: "SUCCESS"})
             history.push("/")
-        }).catch(async (res)=>{
-            const data = await res.json()
-            console.log(data)
-            console.log("전송 실패")
+        }).catch(async (res:Response)=>{
             setIsSending(false)
-            addNotification({text: "업로드 실패", duration: 3, status: "ERROR"})
+            if(res.status===413) addNotification({text: "업로드 실패, 용량이 너무 큽니다", duration: 3, status: "ERROR"})
+            else addNotification({text: "업로드 실패", duration: 3, status: "ERROR"})
+
 
         })
         // eslint-disable-next-line
