@@ -5,7 +5,7 @@ import styled, {css, keyframes} from "styled-components"
 const intro = keyframes`
   0% {
     opacity : 0;
-    transform: translateY(-50px);
+    transform: translateY(50px);
   }
   100% {
     opacity : 1;
@@ -20,7 +20,7 @@ const outro = keyframes`
   }
   100% {
     opacity : 0;
-    transform: translateY(-50px);
+    transform: translateY(50px);
   }
 `;
 
@@ -32,7 +32,7 @@ type WrapperProps = {
 
 const Wrapper = styled.div`
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
   animation: ${intro} 0.2s forwards;
