@@ -13,7 +13,7 @@ export const RouterIndex = () => {
   return (
       <Router>
         <Switch>
-            <PostRouter path={"/post/:username"} role={[Role.USER, Role.ADMIN]}/>
+            <PostRouter path={"/post"} role={[Role.USER, Role.ADMIN]}/>
             <EditRouter path={"/edit"} role={[Role.USER, Role.ADMIN]}/>
             <AuthRouter path={"/auth"} role={[Role.GUEST]}/>
             <HomeRouter path={"/"} role={[Role.USER]}/>

@@ -223,6 +223,7 @@ const defaultProps = {
     onCalendarPrevClick: ()=> {},
     onCalendarNextClick: ()=> {},
     onEmptyClick: (e:any)=>{},
+    onPostClick: (e:any)=>{},
     onImageLoad: (e:any)=>{}
 }
 
@@ -293,7 +294,7 @@ const Calendar = (props: Props) => {
 
                             //일기가 작성됬을 경우
                             return (<DayItem key={i}>
-                                <DayImageWrapper>
+                                <DayImageWrapper onClick={props.onPostClick} data-date={currentFullDate}>
                                     <DayImage onLoad={props.onImageLoad} data-date={currentFullDate} src={props.postInfo[currentFullDate]}></DayImage>
                                     <DayImageNumWrapper>
                                         <DayNum>{currentDate}</DayNum>

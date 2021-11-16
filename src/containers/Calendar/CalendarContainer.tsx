@@ -73,9 +73,16 @@ const CalendarContainer = () => {
         history.push("edit")
     }
 
+    const onPostClick = (e:any) => {
+        const date = e.currentTarget.dataset.date;
+        const query = `date=${date}`
+        console.log(date)
+        history.push(`post?${query}`)
+    }
+
 
     return <>
-        <Calendar onImageLoad={onImageLoad} loading={viewLoading} viewMonth={viewDate.month()+1} viewYear={viewDate.year()} postInfo={monthlyPost} onCalendarPrevClick={onCalendarPrevClick} onCalendarNextClick={onCalendarNextClick} onEmptyClick={onEmptyClick}/>
+        <Calendar onPostClick={onPostClick} onImageLoad={onImageLoad} loading={viewLoading} viewMonth={viewDate.month()+1} viewYear={viewDate.year()} postInfo={monthlyPost} onCalendarPrevClick={onCalendarPrevClick} onCalendarNextClick={onCalendarNextClick} onEmptyClick={onEmptyClick}/>
     </>
 
 
