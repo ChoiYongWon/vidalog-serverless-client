@@ -271,12 +271,14 @@ const Calendar = (props: Props) => {
                 }
                 <DayWrapper $loading={props.loading}>
                     {
-                        Array(35).fill(1).map((data, i)=>{
+                        Array(42).fill(1).map((data, i)=>{
                             const currentFullDate = `${props.viewYear}-${props.viewMonth}-${(i - monthInfo[0] + 1)}`
                             const currentDate = (i - monthInfo[0] + 1)
 
                             //0~34중에 날짜에 해당안되는것들 제외
-                            if(i<monthInfo[0] || currentDate>monthInfo[1]) return <DayItem key={i}></DayItem>
+                            if(i<monthInfo[0]) return <DayItem key={i}></DayItem>
+
+                            if(currentDate>monthInfo[1]) return <></>
 
                             //현재 날짜보다 지난 시간 비활성화
                             if(dayjs(currentFullDate) > dayjs()) return (

@@ -10,7 +10,7 @@ export default {
 
 export const Default : React.VFC<{}> = () => {
 
-    return <Calendar viewMonth={9} loading={false}/>
+    return <Calendar viewMonth={1} loading={false}/>
 }
 
 
