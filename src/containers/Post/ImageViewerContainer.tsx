@@ -14,7 +14,7 @@ const ImageViewerContainer = () => {
             setImages(res.imageUrls)
         })
         console.log(location)
-    },[])
+    },[location])
 
     return <ImageViewer imageUrls={images}/>
 }
