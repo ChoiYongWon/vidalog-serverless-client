@@ -5,9 +5,14 @@ const Layout = styled.div`
   width: 100%;
   height: 100%;
   display : flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
+  margin-top: 2.5rem;
+
+  @media(max-width: 768px){
+    flex-direction: column;
+    margin-top: 0;
+}
 `
 
 type Props = {

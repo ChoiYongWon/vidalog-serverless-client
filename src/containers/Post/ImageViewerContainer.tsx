@@ -1,22 +1,12 @@
-import React, {useEffect, useState} from "react"
-import {useLocation} from "react-router-dom"
+import { useRecoilValue } from "recoil";
 import ImageViewer from "../../components/Post/ImageViewer";
-import {PostAPI} from "../../api/PostAPI";
+import {recoil_Post} from "../../recoils/index"
+
 
 const ImageViewerContainer = () => {
-    const location = useLocation()
-    const [images, setImages] = useState([])
+    const postInfo = useRecoilValue(recoil_Post.post)
 
-    useEffect(()=>{
-        const query = location.search.split("=")[1]
-        PostAPI.getPostByDate(query).then(res=>res.json()).then((res)=>{
-            console.log(res)
-            setImages(res.imageUrls)
-        })
-        console.log(location)
-    },[location])
-
-    return <ImageViewer imageUrls={images}/>
+    return <ImageViewer imageUrls={postInfo.images}/>
 }
 
 export default ImageViewerContainer

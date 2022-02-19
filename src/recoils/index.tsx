@@ -33,6 +33,14 @@ import {
     notification_status
 } from "./notification";
 
+import {
+    post,
+} from "./post"
+
+export const recoil_Post = {
+    post,
+}
+
 export const recoil_Home = {
     editDate
 }
