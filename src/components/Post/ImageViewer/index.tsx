@@ -109,7 +109,7 @@ const ImageViewer = (props: Props) => {
         if(page<props.imageUrls.length-1) setRightBtnStatus(true)
         else setRightBtnStatus(false)
 
-    }, [page])
+    }, [page, props.imageUrls])
 
     const onRightClick = () => {
         imageWrapperRef.current.scrollLeft  = (imageWrapperRef.current.clientWidth * (page+1))
