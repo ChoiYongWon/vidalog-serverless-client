@@ -27,6 +27,50 @@ const EditorContainer = () => {
     const addNotification = useSetRecoilState(recoil_Notification.notification_status)
     const history = useHistory()
 
+    
+    const dataURLtoFile = useCallback((dataurl:any, fileName:string) => {
+ 
+        let arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), 
+            n = bstr.length, 
+            u8arr = new Uint8Array(n);
+            
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+    
+        return new File([u8arr], fileName, {type:mime});
+        // eslint-disable-next-line
+    },[])
+
+    //이미지 리사이즈 및 최적화
+    const optimizeImage = useCallback((image: any, file: any)=>{
+        let canvas: any = document.createElement("canvas"),
+        max_size = 1280,
+        width = image.width,
+        height = image.height;
+
+        if (width > height) {
+            if (width > max_size) {
+            height *= max_size / width;
+            width = max_size;
+            }
+        } else {
+            if (height > max_size) {
+            width *= max_size / height;
+            height = max_size;
+            }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL(file.type);
+        return dataURLtoFile(dataUrl, file.name)
+        // eslint-disable-next-line
+    }, [])
+    
+
 
     useEffect(()=>{
         return ()=>{
@@ -68,10 +112,13 @@ const EditorContainer = () => {
         // eslint-disable-next-line
     }, [imageUrls])
 
+
     useEffect(()=>{
         setImageUrls((state)=>{
             const arr : string[] = []
+                
             for(let i in imageFiles){
+                
                 arr.push(URL.createObjectURL(imageFiles[i].value))
             }
             return arr
@@ -87,26 +134,81 @@ const EditorContainer = () => {
         return `${editDate.year}. ${editDate.month}. ${editDate.date} ${day}`
     }, [editDate])
 
+
+
+
+    //이미지 추가
     const onFileChange = useCallback((e:ChangeEvent<any>) => {
-        setImageFiles((state)=>{
-            let arr = []
-            // let stagedImg = state.map(data=>data.key)
-            for(let i of e.target.files){
-                arr.push({key: i.name, value: i})
-                //중복이미지 제거 --> 아이폰은 안됨
-                // if(!stagedImg.includes(i.name))
-                //     arr.push({key: i.name, value: i})
-            }
-            return [...state, ...arr]
+
+        let fileList = Array.prototype.slice.call(e.target.files)
+        let promises = []
+        for(let i=0;i<fileList.length;i++){
+            promises.push(
+                new Promise((resolve, reject)=>{
+                    const reader:any  = new FileReader()
+                    reader.onload = (e: any) => {
+                    
+                        const image = new Image();
+                        image.className = "img-item";
+                        image.src = e.target.result;
+                        image.onload = (imageEvent) => {
+                            // Resize the image
+                            let optimized = optimizeImage(image, fileList[i]);
+                            resolve({key: fileList[i].name, value: optimized})
+                        }
+                    }
+                    reader.readAsDataURL(fileList[i]);
+                })
+            )
+        }
+        Promise.all(promises).then((data:any)=>{
+            setImageFiles(data)
         })
+            
+            
+            // arr.push({key: i.name, value: i})
+            //중복이미지 제거 --> 아이폰은 안됨
+            // if(!stagedImg.includes(i.name))
+            //     arr.push({key: i.name, value: i})
+
+        // setImageFiles((state)=>{
+        //     let arr:any = []
+        //     // let stagedImg = state.map(data=>data.key)
+        //     for(let i of e.target.files){
+        //         console.log(i)
+        //         const reader:any  = new FileReader()
+        //         reader.onload = (e: any) => {
+        //             const image = new Image();
+        //             image.className = "img-item";
+        //             image.src = e.target.result;
+        //             image.onload = (imageEvent) => {
+        //               // Resize the image
+        //               console.log("load")
+        //               let optimized = optimizeImage(image, i);
+        //               arr.push({key: i.name, value: optimized})
+        //             };
+        //             console.log("reader load")
+        //         };
+        //         reader.readAsDataURL(i);
+                
+        //         // arr.push({key: i.name, value: i})
+        //         //중복이미지 제거 --> 아이폰은 안됨
+        //         // if(!stagedImg.includes(i.name))
+        //         //     arr.push({key: i.name, value: i})
+        //         }
+        //     return [...state, ...arr]
+        // })
+        // eslint-disable-next-line
     },[])
 
+    //이미지 삭제
     const onDelete = useCallback((e:any) => {
         setImageFiles((state)=>{
             return state.filter((data, index)=>!checkedImage.includes(index+""))
         })
     }, [checkedImage])
 
+    //미리보기 이미지 클릭시
     const onImageCheck = useCallback((e:any) => {
         const checkedData = e.currentTarget.dataset.key
         setCheckedImage((state)=>{
@@ -114,11 +216,13 @@ const EditorContainer = () => {
         })
     }, [])
 
+    //취소, 뒤로가기
     const onCancelClick = useCallback(async (e:any)=>{
         e.preventDefault()
         history.push("/")
     }, [history])
 
+    //업로드
     const onSuccessClick = useCallback(async (e:any)=>{
         e.preventDefault()
         if(!TextInputRef.current.value || !imageFiles.length){
