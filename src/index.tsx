@@ -5,10 +5,13 @@ import reportWebVitals from './reportWebVitals';
 import {
   RecoilRoot
 } from "recoil"
+import dotenv from "dotenv"
 
 import {
   BrowserRouter as Router
 } from "react-router-dom"
+
+dotenv.config()
 
 ReactDOM.render(
   <React.StrictMode>
