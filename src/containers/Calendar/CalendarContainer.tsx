@@ -14,6 +14,7 @@ const CalendarContainer = () => {
     const [viewDate, setViewDate] = useState<any>(dayjs())
     const [viewLoading, setViewLoading] = useState(false)
     const [imageStatus, setImageStatus] = useState({})
+    const [dateSync, setDateSync] = useState(false) // 처음 접속시 쿼리가 있을경우 현재 달도 같이 요청하는거 방지
     const setEditDate = useSetRecoilState(recoil_Home.editDate)
     const history = useHistory()
     const location = useLocation()
@@ -28,29 +29,40 @@ const CalendarContainer = () => {
                 return newDate
             })
         }
+        setDateSync(true)
     }, [location.search])
 
     useEffect(()=>{
-        setViewLoading(true)
-        PostAPI.getPostByMonth(`${viewDate.year()}-${viewDate.month()+1}`).then(async(res)=>{
-            const dates: [] = await res.json()
-            const result: any = {}
-            dates.forEach((data:any)=>result[data["date"]] = data["imgUrl"])
-            setMonthlyPost(result)
-            return dates.map((i)=>i["date"])
-        }).then((date:string[])=>{
-            if(date.length===0){ setViewLoading(false); return}
-
-            const imageObject:any = {}
-            date.forEach((i:string)=>imageObject[i] = new Promise(()=>{}))
-            setImageStatus(imageObject)
-        }).catch((e)=>setViewLoading(false))
-    },[viewDate, setViewLoading])
+        if(dateSync){
+            setViewLoading(true)
+            PostAPI.getPostByMonth(`${viewDate.year()}-${viewDate.month()+1}`).then(async(res)=>{
+                const dates: [] = await res.json()
+                const result: any = {}
+                
+                dates.forEach((data:any)=>result[data["date"]] = data["imgUrl"])
+                setMonthlyPost(result)
+                return dates.map((i)=>i["date"])
+            }).then((date:string[])=>{
+                if(date.length===0){ setViewLoading(false); return}
+                const imageObject:any = {}
+                
+                date.forEach((i:string)=>imageObject[i] = new Promise(()=>{}))
+                setImageStatus(imageObject)
+            }).catch((e)=>{
+                console.log(e)
+                setViewLoading(false)
+            })
+        }
+        
+    },[viewDate, dateSync, setViewLoading])
 
     useEffect(()=>{
-        if(viewLoading && Object.keys(imageStatus).length > 0) Promise.allSettled(Object.values(imageStatus)).then(()=>{
+        if(viewLoading && Object.keys(imageStatus).length > 0) Promise.all(Object.values(imageStatus)).then((result: any)=>{
             setViewLoading(false)
             setImageStatus({})
+        }).catch(e=>{
+            console.log(e)
+            setViewLoading(false)
         })
     }, [imageStatus, viewLoading])
 
@@ -92,7 +104,6 @@ const CalendarContainer = () => {
     const onPostClick = (e:any) => {
         const date = e.currentTarget.dataset.date;
         const query = `date=${date}`
-        console.log(date)
         history.push(`post?${query}`)
     }
 
