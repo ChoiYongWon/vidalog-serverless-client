@@ -5,6 +5,7 @@ import {useSetRecoilState} from "recoil";
 import {recoil_Home} from "../../recoils";
 import {useHistory} from "react-router-dom";
 import dayjs from 'dayjs'
+import {useLocation} from "react-router-dom"
 
 
 const CalendarContainer = () => {
@@ -15,6 +16,19 @@ const CalendarContainer = () => {
     const [imageStatus, setImageStatus] = useState({})
     const setEditDate = useSetRecoilState(recoil_Home.editDate)
     const history = useHistory()
+    const location = useLocation()
+
+    useEffect(()=>{
+        if(location.search){
+            const date = location.search.split("=")[1].split("-")
+            const year = Number(date[0])
+            const month = Number(date[1])
+            setViewDate((state: any)=>{
+                const newDate = dayjs(state).year(year).month(month-1)
+                return newDate
+            })
+        }
+    }, [location.search])
 
     useEffect(()=>{
         setViewLoading(true)
@@ -50,17 +64,19 @@ const CalendarContainer = () => {
     }
 
     const onCalendarPrevClick = () => {
-        setViewDate((state: any)=>{
-            const newDate = dayjs(state).subtract(1, "month")
-            return newDate
+        const newDate = dayjs(viewDate).subtract(1, "month")
+        history.push({
+            search: `?date=${newDate.format("YYYY-MM")}`
         })
+
     }
 
     const onCalendarNextClick = () => {
-        setViewDate((state: any)=>{
-            const newDate = dayjs(state).add(1, "month")
-            return newDate
+        const newDate = dayjs(viewDate).add(1, "month")
+        history.push({
+            search: `?date=${newDate.format("YYYY-MM")}`
         })
+
     }
 
     const onEmptyClick = (e:any) => {
